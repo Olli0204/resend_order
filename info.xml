@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jtlshopplugin>
+    <Name>Bestellung erneut Senden</Name>
+    <Description>Ermöglich das zurücksetzen vom Abgeholt Status aus dem Onlineshop Backend.</Description>
+    <Author>Oliver Kamps</Author>
+    <URL>https://ollipolli.de</URL>
+    <XMLVersion>102</XMLVersion>
+    <MinShopVersion>5.3.4</MinShopVersion>
+    <MaxShopVersion>5.5.3</MaxShopVersion>
+    <PluginID>resend_order</PluginID>
+    <Version>1.0.4</Version>
+    <CreateDate>2025-01-04</CreateDate>
+    <Install>
+        <AdminWidget>
+            <Widget>
+                <Title>Bestellungen Pending</Title>
+                <Class>InfoWidget</Class>
+                <Container>center</Container>
+                <Description>Zeigt die Anzahl der hängenden gebliebenen Bestellungen an.</Description>
+                <Pos>1</Pos>
+                <Expanded>1</Expanded>
+                <Active>1</Active>
+            </Widget>
+        </AdminWidget>
+        <Adminmenu>
+            <Customlink sort="1">
+                <Name>Übersicht</Name>
+                <Filename>overview.php</Filename>
+            </Customlink> 
+            <Customlink sort="2">
+                <Name>Status zurücksetzen</Name>
+            </Customlink>        
+        </Adminmenu>
+    </Install>
+</jtlshopplugin>
