@@ -1,5 +1,5 @@
 {if empty($orders)}
-<p class="text-muted">Derzeit gibt es keine Bestellungen mit dem Status Pending.</p>
+<p>Derzeit gibt es keine Bestellungen mit dem Status Pending.</p>
 {else}
 
 <p class="mb-3">Die folgenden Bestellungen wurden vom Warenwirtschaftssystem noch nicht abgeholt (Status <strong>Pending</strong>). Wähle eine oder mehrere Bestellungen aus und setze den Status zurück, damit sie erneut übertragen werden können.</p>
