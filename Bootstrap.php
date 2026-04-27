@@ -3,13 +3,13 @@
 namespace Plugin\resend_order;
 
 use JTL\Events\Dispatcher;
-use JTL\Helpers\Form;
-use JTL\Helpers\Request;
 use JTL\Link\LinkInterface;
 use JTL\Plugin\Bootstrapper;
 use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
 use JTL\Backend\Notification;
+use Laminas\Diactoros\ServerRequestFactory;
+use function Functional\first;
 
 /**
  * Class Bootstrap
@@ -36,13 +36,6 @@ class Bootstrap extends Bootstrapper
                 $backendURL
             );
         }
-    }
-
-    /**
-     * @param array $args
-     */
-    public function addConsentItem(array $args): void
-    {
     }
 
     /**
@@ -74,47 +67,34 @@ class Bootstrap extends Bootstrapper
         return false;
     }
 
-    private function checkOrder(string $ordernumber): bool
-    {
-        $result = Shop::Container()->getDB()->select('tbestellung', 'cBestellNr', $ordernumber);
-        if ($result === null) {
-            return false;
-        }
-
-        return $result->cAbgeholt === 'P';
-    }
-
     /**
      * @inheritdoc
      */
     public function renderAdminMenuTab(string $tabName, int $menuID, JTLSmarty $smarty): string
     {
-        $plugin     = $this->getPlugin();
-        $backendURL = \method_exists($plugin->getPaths(), 'getBackendURL')
-            ? $plugin->getPaths()->getBackendURL()
-            : Shop::getAdminURL() . '/plugin.php?kPlugin=' . $plugin->getID();
+        return $this->renderModelTab($menuID, $smarty);
+    }
 
-        $smarty->assign('menuID', $menuID)
-            ->assign('posted', null);
+    private function renderModelTab(int $menuID, JTLSmarty $smarty): string
+    {
+        $controller         = new ModelBackendController(
+            $this->getDB(),
+            $this->getCache(),
+            Shop::Container()->getAlertService(),
+            Shop::Container()->getAdminAccount(),
+            Shop::Container()->getGetText()
+        );
+        $controller->menuID = $menuID;
+        $controller->plugin = $this->getPlugin();
 
-        $template = 'reset.tpl';
+        $request  = ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        $response = $controller->getResponse($request, [], $smarty);
 
-        if ($tabName === 'Status zurücksetzen') {
-            if (Form::validateToken() && ($posted = Request::postVar('reset_input')) !== null) {
-                $smarty->assign('posted', $posted);
-
-                if ($this->checkOrder((string) $posted) === true) {
-                    $obj             = new \stdClass();
-                    $obj->cAbgeholt  = 'N';
-                    Shop::Container()->getDB()->update('tbestellung', 'cBestellNr', (string) $posted, $obj);
-                    $smarty->assign('output', 'Erfolgreich geändert!');
-                } else {
-                    $smarty->assign('output', 'Bestellung hat nicht den Status Pending!');
-                }
-            }
+        if (\count($response->getHeader('location')) > 0) {
+            \header('Location:' . first($response->getHeader('location')));
+            exit();
         }
 
-        return $smarty->assign('backendURL', $backendURL)
-            ->fetch($this->getPlugin()->getPaths()->getAdminPath() . '/templates/' . $template);
+        return (string) $response->getBody();
     }
 }
