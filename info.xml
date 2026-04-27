@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jtlshopplugin>
     <Name>Bestellung erneut Senden</Name>
-    <Description>Ermöglich das zurücksetzen vom Abgeholt Status aus dem Onlineshop Backend.</Description>
+    <Description>Ermöglicht das Zurücksetzen des Abgeholt-Status direkt aus dem Shop-Backend, damit Bestellungen erneut an die Warenwirtschaft übertragen werden können.</Description>
     <Author>Oliver Kamps</Author>
     <URL>https://ollipolli.de</URL>
     <XMLVersion>102</XMLVersion>
     <MinShopVersion>5.3.4</MinShopVersion>
-    <MaxShopVersion>5.5.3</MaxShopVersion>
+    <MaxShopVersion>5.7.0</MaxShopVersion>
     <PluginID>resend_order</PluginID>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <CreateDate>2025-01-04</CreateDate>
     <Install>
         <AdminWidget>
