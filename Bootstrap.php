@@ -2,48 +2,39 @@
 
 namespace Plugin\resend_order;
 
-use JTL\Alert\Alert;
-use JTL\Catalog\Category\Kategorie;
-use JTL\Catalog\Product\Artikel;
-use JTL\Consent\Item;
 use JTL\Events\Dispatcher;
-use JTL\Events\Event;
 use JTL\Helpers\Form;
 use JTL\Helpers\Request;
 use JTL\Link\LinkInterface;
 use JTL\Plugin\Bootstrapper;
-use JTL\Router\Router;
 use JTL\Shop;
-use JTL\Shopsetting;
 use JTL\Smarty\JTLSmarty;
-use \JTL\Backend\Notification;
-use Laminas\Diactoros\ServerRequestFactory;
-use function Functional\first;
+use JTL\Backend\Notification;
 
 /**
  * Class Bootstrap
- * @package Plugin\jtl_test
+ * @package Plugin\resend_order
  */
 class Bootstrap extends Bootstrapper
 {
     /**
-     * @var TestHelper
-     */
-
-    /**
      * @inheritdoc
      */
-    public function boot(Dispatcher $dispatcher)
-    {    
-        
+    public function boot(Dispatcher $dispatcher): void
+    {
         $plugin     = $this->getPlugin();
         $backendURL = \method_exists($plugin->getPaths(), 'getBackendURL')
             ? $plugin->getPaths()->getBackendURL()
             : Shop::getAdminURL() . '/plugin.php?kPlugin=' . $plugin->getID();
 
-        $result = $this->getDB()->selectAll('tbestellung', 'cAbgeholt', "P");
-         if(count($result) > 0){
-            Notification::getInstance()->add(2,$this->getPlugin()->getMeta()->getName(),"Es gibt eine Bestellung mit Status Pending!", $backendURL);
+        $result = $this->getDB()->selectAll('tbestellung', 'cAbgeholt', 'P');
+        if (count($result) > 0) {
+            Notification::getInstance()->add(
+                2,
+                $this->getPlugin()->getMeta()->getName(),
+                'Es gibt eine Bestellung mit Status Pending!',
+                $backendURL
+            );
         }
     }
 
@@ -51,14 +42,14 @@ class Bootstrap extends Bootstrapper
      * @param array $args
      */
     public function addConsentItem(array $args): void
-    {  
+    {
     }
 
     /**
      * @inheritdoc
      */
     public function installed(): void
-    {   
+    {
     }
 
     /**
@@ -80,20 +71,19 @@ class Bootstrap extends Bootstrapper
      */
     public function prepareFrontend(LinkInterface $link, JTLSmarty $smarty): bool
     {
+        return false;
     }
 
-    private function checkOrder(int $ordernumber): bool
+    private function checkOrder(string $ordernumber): bool
     {
         $result = Shop::Container()->getDB()->select('tbestellung', 'cBestellNr', $ordernumber);
-        if($result->cAbgeholt == 'P')
-        {
-            return true;
-        }
-        else
-        {
+        if ($result === null) {
             return false;
         }
+
+        return $result->cAbgeholt === 'P';
     }
+
     /**
      * @inheritdoc
      */
@@ -107,24 +97,21 @@ class Bootstrap extends Bootstrapper
         $smarty->assign('menuID', $menuID)
             ->assign('posted', null);
 
+        $template = 'reset.tpl';
+
         if ($tabName === 'Status zurücksetzen') {
-            $template = 'reset.tpl';
             if (Form::validateToken() && ($posted = Request::postVar('reset_input')) !== null) {
                 $smarty->assign('posted', $posted);
 
-                if ($this->checkOrder((int)$posted) == true)
-                {
-                    $obj = new \stdClass();
-                    $obj->cAbgeholt = 'N';
-                    Shop::Container()->getDB()->update('tbestellung', 'cBestellNr', (int) $posted, $obj);
-                    $smarty->assign('output', "Erfolgreich geändert!");
+                if ($this->checkOrder((string) $posted) === true) {
+                    $obj             = new \stdClass();
+                    $obj->cAbgeholt  = 'N';
+                    Shop::Container()->getDB()->update('tbestellung', 'cBestellNr', (string) $posted, $obj);
+                    $smarty->assign('output', 'Erfolgreich geändert!');
+                } else {
+                    $smarty->assign('output', 'Bestellung hat nicht den Status Pending!');
                 }
-                else
-                {
-                    $smarty->assign('output', "Bestellung hat nicht den Status Pending!");
-                }    
             }
-            
         }
 
         return $smarty->assign('backendURL', $backendURL)

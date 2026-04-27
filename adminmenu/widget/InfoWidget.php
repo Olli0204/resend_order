@@ -4,11 +4,10 @@ namespace Plugin\resend_order;
 
 use JTL\Widgets\AbstractWidget;
 use JTL\Shop;
-use JTL\Plugin\PluginInterface;
 
 /**
- * Class TestWidget
- * @package Plugin\jtl_test
+ * Class InfoWidget
+ * @package Plugin\resend_order
  */
 class InfoWidget extends AbstractWidget
 {
@@ -18,16 +17,16 @@ class InfoWidget extends AbstractWidget
     public function init()
     {
         parent::init();
-        $result = Shop::Container()->getDB()->selectAll('tbestellung', 'cAbgeholt', "P");
-        $count = count($result);
+        $result = Shop::Container()->getDB()->selectAll('tbestellung', 'cAbgeholt', 'P');
+        $count  = count($result);
         $this->oSmarty->assign('output', $count);
+        $this->oSmarty->assign('color_active', '');
 
-        if ($count > 0)
-        {
-            $this->oSmarty->assign('color_active','color: #ff000099;');
+        if ($count > 0) {
+            $this->oSmarty->assign('color_active', 'color: #ff000099;');
         }
 
-        $plugin = $this->getPlugin();
+        $plugin     = $this->getPlugin();
         $backendURL = \method_exists($plugin->getPaths(), 'getBackendURL')
             ? $plugin->getPaths()->getBackendURL()
             : Shop::getAdminURL() . '/plugin.php?kPlugin=' . $plugin->getID();
