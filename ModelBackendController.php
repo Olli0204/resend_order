@@ -2,13 +2,13 @@
 
 namespace Plugin\resend_order;
 
-use JTL\Alert\Alert;
 use JTL\Helpers\Form;
+use JTL\Helpers\Request;
 use JTL\Plugin\PluginInterface;
 use JTL\Router\Controller\Backend\GenericModelController;
 use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
-use Laminas\Diactoros\Response\HtmlResponse;
+use Plugin\resend_order\Models\PendingOrder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,35 +20,43 @@ class ModelBackendController extends GenericModelController
 
     public function getResponse(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
     {
+        $this->smarty        = $smarty;
+        $this->route         = \str_replace(Shop::getAdminURL(), '', $this->plugin->getPaths()->getBackendURL());
+        $this->modelClass    = PendingOrder::class;
+        $this->adminBaseFile = \ltrim($this->route, '/');
+
         $backendURL = $this->plugin->getPaths()->getBackendURL();
         $post       = (array) $request->getParsedBody();
+        $postAction = $post['action'] ?? '';
 
-        if (($post['action'] ?? '') === 'deleteSelected'
-            && !empty($post['item_ids'])
-            && Form::validateToken()
-        ) {
-            $count = 0;
+        // Single-row reset — model_list.tpl sends action=delete with id=kBestellung
+        if ($postAction === 'delete' && Form::validateToken()) {
+            $id = Request::getInt('id');
+            if ($id > 0) {
+                $obj            = new \stdClass();
+                $obj->cAbgeholt = 'N';
+                $this->getDB()->update('tbestellung', 'kBestellung', $id, $obj);
+            }
+            return (new \Laminas\Diactoros\Response())->withHeader('location', $backendURL);
+        }
+
+        // Mass reset — model_list.tpl sends action=deleteSelected with item_ids[]
+        if ($postAction === 'deleteSelected' && !empty($post['item_ids']) && Form::validateToken()) {
             foreach ((array) $post['item_ids'] as $id) {
                 $obj            = new \stdClass();
                 $obj->cAbgeholt = 'N';
                 $this->getDB()->update('tbestellung', 'kBestellung', (int) $id, $obj);
-                $count++;
             }
-            Shop::Container()->getAlertService()->addAlert(
-                Alert::TYPE_SUCCESS,
-                $count . ' Bestellung(en) erfolgreich zurückgesetzt.',
-                'resendOrderReset'
-            );
             return (new \Laminas\Diactoros\Response())->withHeader('location', $backendURL);
         }
 
-        $orders = $this->getDB()->selectAll('tbestellung', 'cAbgeholt', 'P');
+        // List view
+        $smarty->assign('orders', PendingOrder::loadAll($this->getDB(), [], []))
+               ->assign('route', $this->route)
+               ->assign('action', $backendURL)
+               ->assign('step', 'overview')
+               ->assign('tab', 'overview');
 
-        $smarty->assign('orders', $orders)
-               ->assign('action', $backendURL);
-
-        return new HtmlResponse(
-            $smarty->fetch(__DIR__ . '/adminmenu/templates/overview.tpl')
-        );
+        return $this->handle(__DIR__ . '/adminmenu/templates/overview.tpl');
     }
 }
