@@ -46,12 +46,12 @@
                     {foreach $orders as $order}
                     <tr>
                         <td>
-                            <input type="checkbox" name="item_ids[]" value="{$order->getKBestellung()|intval}" class="order-cb">
+                            <input type="checkbox" name="item_ids[]" value="{$order->kBestellung|intval}" class="order-cb">
                         </td>
-                        <td>{$order->getCBestellNr()|escape:'html'}</td>
-                        <td>{$order->getCZahlungsartName()|default:'-'|escape:'html'}</td>
-                        <td>{$order->getFGesamtsumme()|string_format:"%.2f"|replace:'.':','} &euro;</td>
-                        <td>{$order->getDErstellt()|escape:'html'}</td>
+                        <td>{$order->cBestellNr|escape:'html'}</td>
+                        <td>{$order->cZahlungsartName|default:'-'|escape:'html'}</td>
+                        <td>{$order->fGesamtsumme|string_format:"%.2f"|replace:'.':','} &euro;</td>
+                        <td>{$order->dErstellt|escape:'html'}</td>
                     </tr>
                     {/foreach}
                 </tbody>

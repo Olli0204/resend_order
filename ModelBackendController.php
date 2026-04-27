@@ -8,7 +8,7 @@ use JTL\Plugin\PluginInterface;
 use JTL\Router\Controller\Backend\GenericModelController;
 use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
-use Plugin\resend_order\Models\PendingOrder;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,11 +20,6 @@ class ModelBackendController extends GenericModelController
 
     public function getResponse(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
     {
-        $this->smarty        = $smarty;
-        $this->route         = \str_replace(Shop::getAdminURL(), '', $this->plugin->getPaths()->getBackendURL());
-        $this->modelClass    = PendingOrder::class;
-        $this->adminBaseFile = \ltrim($this->route, '/');
-
         $backendURL = $this->plugin->getPaths()->getBackendURL();
         $post       = (array) $request->getParsedBody();
 
@@ -47,10 +42,13 @@ class ModelBackendController extends GenericModelController
             return (new \Laminas\Diactoros\Response())->withHeader('location', $backendURL);
         }
 
-        $smarty->assign('orders', PendingOrder::loadAll($this->getDB(), [], []))
-               ->assign('route', $this->route)
+        $orders = $this->getDB()->selectAll('tbestellung', 'cAbgeholt', 'P');
+
+        $smarty->assign('orders', $orders)
                ->assign('action', $backendURL);
 
-        return $this->handle(__DIR__ . '/adminmenu/templates/overview.tpl');
+        return new HtmlResponse(
+            $smarty->fetch(__DIR__ . '/adminmenu/templates/overview.tpl')
+        );
     }
 }
