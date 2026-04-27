@@ -8,7 +8,7 @@
     <MinShopVersion>5.3.4</MinShopVersion>
     <MaxShopVersion>5.5.3</MaxShopVersion>
     <PluginID>resend_order</PluginID>
-    <Version>1.0.4</Version>
+    <Version>1.1.0</Version>
     <CreateDate>2025-01-04</CreateDate>
     <Install>
         <AdminWidget>
