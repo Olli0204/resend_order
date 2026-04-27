@@ -72,11 +72,7 @@ class Bootstrap extends Bootstrapper
      */
     public function renderAdminMenuTab(string $tabName, int $menuID, JTLSmarty $smarty): string
     {
-        if ($tabName === 'Übersicht') {
-            return $this->renderModelTab($menuID, $smarty);
-        }
-
-        return '';
+        return $this->renderModelTab($menuID, $smarty);
     }
 
     private function renderModelTab(int $menuID, JTLSmarty $smarty): string

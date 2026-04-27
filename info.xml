@@ -26,9 +26,6 @@
             <Customlink sort="1">
                 <Name>Übersicht</Name>
             </Customlink>
-            <Customlink sort="2">
-                <Name>Status zurücksetzen</Name>
-            </Customlink>
         </Adminmenu>
     </Install>
 </jtlshopplugin>
