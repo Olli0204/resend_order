@@ -25,11 +25,10 @@
         <Adminmenu>
             <Customlink sort="1">
                 <Name>Übersicht</Name>
-                <Filename>overview.php</Filename>
-            </Customlink> 
+            </Customlink>
             <Customlink sort="2">
                 <Name>Status zurücksetzen</Name>
-            </Customlink>        
+            </Customlink>
         </Adminmenu>
     </Install>
 </jtlshopplugin>
