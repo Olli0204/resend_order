@@ -6,9 +6,9 @@
     <URL>https://ollipolli.de</URL>
     <XMLVersion>102</XMLVersion>
     <MinShopVersion>5.3.4</MinShopVersion>
-    <MaxShopVersion>5.7.0</MaxShopVersion>
+    <MaxShopVersion>5.8.0</MaxShopVersion>
     <PluginID>resend_order</PluginID>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <CreateDate>2025-01-04</CreateDate>
     <Install>
         <AdminWidget>

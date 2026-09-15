@@ -35,11 +35,14 @@ Die Übersichtsseite listet alle Bestellungen mit Status Pending in einer Tabell
 | Eigenschaft | Wert |
 |---|---|
 | Mindest-Shopversion | 5.3.4 |
-| Maximale Shopversion | 5.7.0 |
+| Maximale Shopversion | 5.8.0 |
 
 ---
 
 ## Changelog
+
+### 1.2.1
+- Kompatibilität mit JTL-Shop 5.8.0 geprüft (Bootstrapper, AbstractWidget, GenericModelController, Notification, Smarty 5.7 unverändert), MaxShopVersion auf 5.8.0 angehoben
 
 ### 1.2.0
 - Übersichtsseite mit Checkbox-basiertem Bulk-Reset überarbeitet
