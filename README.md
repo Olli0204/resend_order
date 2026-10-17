@@ -35,11 +35,14 @@ Die Übersichtsseite listet alle Bestellungen mit Status Pending in einer Tabell
 | Eigenschaft | Wert |
 |---|---|
 | Mindest-Shopversion | 5.3.4 |
-| Maximale Shopversion | 5.8.0 |
+| Maximale Shopversion | 5.8.2 |
 
 ---
 
 ## Changelog
+
+### 1.2.2
+- Kompatibilität mit JTL-Shop 5.8.2 geprüft: die Core-Änderungen 5.8.0 → 5.8.2 (Sicherheitsupdate) betreffen nur Consent-Manager, RMA, Sonderpreis-Berechnung, Banner/ImageMap, PLZ-Autovervollständigung und Backend-Login; NOVA-Templates und Plugin-API sind unverändert. MaxShopVersion auf 5.8.2 angehoben
 
 ### 1.2.1
 - Kompatibilität mit JTL-Shop 5.8.0 geprüft (Bootstrapper, AbstractWidget, GenericModelController, Notification, Smarty 5.7 unverändert), MaxShopVersion auf 5.8.0 angehoben
