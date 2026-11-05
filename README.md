@@ -35,11 +35,14 @@ Die Übersichtsseite listet alle Bestellungen mit Status Pending in einer Tabell
 | Eigenschaft | Wert |
 |---|---|
 | Mindest-Shopversion | 5.3.4 |
-| Maximale Shopversion | 5.8.2 |
+| Maximale Shopversion | 5.8.3 |
 
 ---
 
 ## Changelog
+
+### 1.2.3
+- Kompatibilität mit JTL-Shop 5.8.3 geprüft: die Core-Änderungen 5.8.2 → 5.8.3 (Sicherheits- und Performance-Update) betreffen nur Backend-Benutzerverwaltung/2FA/Rechteprüfung, Backend-Benachrichtigungen, das Template-Änderungsprotokoll, den Wawi-Bildabgleich, die Zahlungsart-Prüfung im Checkout sowie die SQL von Preissortierung und Filtern (MariaDB 10.11); NOVA-Templates und Plugin-API sind unverändert. MaxShopVersion auf 5.8.3 angehoben
 
 ### 1.2.2
 - Kompatibilität mit JTL-Shop 5.8.2 geprüft: die Core-Änderungen 5.8.0 → 5.8.2 (Sicherheitsupdate) betreffen nur Consent-Manager, RMA, Sonderpreis-Berechnung, Banner/ImageMap, PLZ-Autovervollständigung und Backend-Login; NOVA-Templates und Plugin-API sind unverändert. MaxShopVersion auf 5.8.2 angehoben
