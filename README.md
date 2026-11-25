@@ -35,11 +35,14 @@ Die Übersichtsseite listet alle Bestellungen mit Status Pending in einer Tabell
 | Eigenschaft | Wert |
 |---|---|
 | Mindest-Shopversion | 5.3.4 |
-| Maximale Shopversion | 5.8.4 |
+| Maximale Shopversion | 5.8.5 |
 
 ---
 
 ## Changelog
+
+### 1.2.5
+- Kompatibilität mit JTL-Shop 5.8.5 geprüft: die Core-Änderungen 5.8.4 → 5.8.5 (Sicherheitsupdate) betreffen nur Backend (Benutzersprache, Länderverwaltung, OPC-Editor, Dateimanager, Weiterleitungsprüfung), die Kodierung von Artikelnamen in der Bestellung und phpseclib; keine vom Plugin genutzte API und keine NOVA-Templates sind betroffen. MaxShopVersion auf 5.8.5 angehoben
 
 ### 1.2.4
 - Kompatibilität mit JTL-Shop 5.8.4 geprüft: die Core-Änderungen 5.8.3 → 5.8.4 (Sicherheitsupdate) betreffen nur Lieferadressen-Prüfung im Checkout, OPC-Vorschau-Token, IP-Ermittlung hinter Proxys, CSRF-Schutz im Checkout, Rate-Limits für Wawi-Login und Backend, Backend-Benutzer- und Einstellungsverwaltung sowie Bibliotheks-Updates (Guzzle 7.15, Smarty 5.8); keine vom Plugin genutzte API und keine überschriebenen NOVA-Templates sind betroffen. MaxShopVersion auf 5.8.4 angehoben
